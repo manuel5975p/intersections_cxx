@@ -31,7 +31,11 @@ struct vec3{
     vec3 cross(const vec3& o)const{
         return vec3(y() * o.z() - z() * o.y(), z() * o.x() - x() * o.z(), x() * o.y() - y() * o.z());
     }
-    const Scalar& operator()(unsigned i){
+    const Scalar& operator()(unsigned i)const{
+        assert(i < 3);
+        return values[i];
+    }
+    Scalar& operator()(unsigned i){
         assert(i < 3);
         return values[i];
     }
@@ -41,6 +45,10 @@ struct vec3{
     Scalar norm()const{
         using std::sqrt;
         return sqrt(squaredNorm());
+    }
+    vec3 normalized()const{
+        Scalar isqrt = Scalar(1) / norm();
+        return *this * isqrt;
     }
     void fill(const Scalar& x){
         values[0] = x;
@@ -56,5 +64,12 @@ struct vec3{
     vec3& operator-=(const vec3& o){*this = *this - o;return *this;}
     vec3  operator*(const Scalar& o)const{return vec3(x() * o,y() * o, z() * o);}
     vec3  operator/(const Scalar& o)const{return vec3(x() / o,y() / o, z() / o);}
+    template<typename stream_t>
+    friend stream_t& operator<<(stream_t& str, const vec3& v){
+        for(int i = 0;i < 3;i++){
+            str << v.values[i] << "\n";
+        }
+        return str;
+    }
 };
 #endif

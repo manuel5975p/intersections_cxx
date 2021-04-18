@@ -14,6 +14,12 @@ struct intersection{
     vec3::Scalar u;
     vec3::Scalar v;
 };
+struct double_intersection{
+    vec3 p;
+    std::pair<vec3::Scalar, vec3::Scalar> t;
+    vec3::Scalar u;
+    vec3::Scalar v;
+};
 struct ray{
     vec3 o, d, id;
     ray(){}
@@ -32,8 +38,16 @@ struct sphere{
     vec3 p;
     vec3::Scalar r;
 };
+struct cylinder{
+    vec3 pa;
+    vec3 pb;
+    vec3::Scalar r;
+};
 struct aabb{
     vec3 start;
     vec3 end;
 };
+inline auto sq(const auto& x){
+    return x * x;
+}
 #endif

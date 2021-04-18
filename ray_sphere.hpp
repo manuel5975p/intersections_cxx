@@ -1,9 +1,6 @@
 #ifndef RAY_SPHERE_HPP
 #define RAY_SPHERE_HPP
 #include "structs.hpp"
-inline auto sq(const auto& x){
-    return x * x;
-}
 std::optional<intersection> intersect(const ray& r, const sphere& s){
     using std::asin;
     using std::atan2;

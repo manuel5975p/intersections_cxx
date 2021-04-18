@@ -37,7 +37,7 @@ std::optional<intersection> intersect(const ray &r, const triangle &t){
     ret.t = edge2.dot(qvec) * inv_det;
     (ret.u) *= inv_det;
     (ret.v) *= inv_det;
-    ret.p = r.o + ret.t * r.d;
+    ret.p = r.o + r.d * ret.t;
     return ret;
 }
 /*
