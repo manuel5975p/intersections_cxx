@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.10)
+project(intersectionxx)
+add_library(intersectionxx INTERFACE)
+set(CMAKE_CXX_STANDARD 20)
+target_include_directories(intersectionxx INTERFACE "${CMAKE_CURRENT_LIST_DIR}/include")
+add_executable(exmp test.cpp)
+target_link_libraries(exmp PUBLIC intersectionxx)
