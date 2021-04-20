@@ -1,8 +1,20 @@
 cmake_minimum_required(VERSION 3.10)
+include(FetchContent)
 project(intersectionxx)
 add_library(intersectionxx INTERFACE)
 set(CMAKE_CXX_STANDARD 20)
 target_include_directories(intersectionxx INTERFACE "${CMAKE_CURRENT_LIST_DIR}/include")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native -ffast-math -flto")
+set(DONT_BUILD_CPPAVX_EXAMPLE True)
+FetchContent_Declare(
+    cppavx
+    GIT_REPOSITORY https://github.com/manuel5975p/cpp-avx-utils.git
+)
+FetchContent_GetProperties(cppavx)
+if(NOT cppavx_POPULATED)
+    FetchContent_Populate(cppavx)
+    add_subdirectory("${cppavx_SOURCE_DIR}")
+endif()
+target_link_libraries(intersectionxx INTERFACE cpp-avx)
 add_executable(exmp "test.cpp" "include/aabb_aabb.hpp")
 target_link_libraries(exmp PUBLIC intersectionxx)
