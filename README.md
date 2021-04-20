@@ -1,4 +1,4 @@
-#intersections_cxx
+# intersections_cxx
 #### A fast C++17 header-only primitive-primitive intersection library
 |        |ray|triangle|sphere|cylinder|AABB|
 |---|---|---|---|---|---|
@@ -32,7 +32,7 @@ int main(){
 }
 ```
 **Caution:** u and v are only correctly set for ray-triangle intersections.
-#####Another example
+##### Another example
 ```cpp
 #include <intersections.hpp>
 #include <iostream>
