@@ -7,6 +7,7 @@
 |sphere  | ✅ | ❌   | ✅ | ❌ | ❌ |
 |cylinder| ✅ | ❌   | ❌ | ❌ | ❌ |
 |AABB    | ✅ | ✅   | ✅ | ❌ | ✅ |
+
 #####Usage Example:
 ```cpp
 #include <intersections.hpp>
