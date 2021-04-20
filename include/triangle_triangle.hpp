@@ -6,8 +6,8 @@
  * Updated June 1999: removed the divisions -- a little faster now!
  * Updated October 1999: added {} to CROSS and SUB macros 
  *
- * int NoDivTriTriIsect(vec3::Scalar V0[3],vec3::Scalar V1[3],vec3::Scalar V2[3],
- *                                            vec3::Scalar U0[3],vec3::Scalar U1[3],vec3::Scalar U2[3])
+ * int NoDivTriTriIsect(float V0[3],float V1[3],float V2[3],
+ *                                            float U0[3],float U1[3],float U2[3])
  *
  * parameters: vertices of triangle 1: V0,V1,V2
  *                         vertices of triangle 2: U0,U1,U2
@@ -19,7 +19,7 @@
 #include <cmath>
 #include "structs.hpp"
 
-#define FABS(x) (vec3::Scalar(fabs(x)))                /* implement as is fastest on your machine */
+#define FABS(x) (float(fabs(x)))                /* implement as is fastest on your machine */
 
 /* if USE_EPSILON_TEST is true then we do a check:
                  if |dv|<EPSILON then dv=0.0;
@@ -45,7 +45,7 @@
 #define SORT(a,b)             \
                          if(a>b)        \
                          {                    \
-                             vec3::Scalar c; \
+                             float c; \
                              c=a;         \
                              a=b;         \
                              b=c;         \
@@ -77,7 +77,7 @@
 
 #define EDGE_AGAINST_TRI_EDGES(V0,V1,U0,U1,U2) \
 {                                                                                            \
-    vec3::Scalar Ax,Ay,Bx,By,Cx,Cy,e,d,f;                             \
+    float Ax,Ay,Bx,By,Cx,Cy,e,d,f;                             \
     Ax=V1[i0]-V0[i0];                                                        \
     Ay=V1[i1]-V0[i1];                                                        \
     /* test edge U0,U1 against V0,V1 */                    \
@@ -90,7 +90,7 @@
 
 #define POINT_IN_TRI(V0,U0,U1,U2)                     \
 {                                                                                     \
-    vec3::Scalar a,b,c,d0,d1,d2;                                         \
+    float a,b,c,d0,d1,d2;                                         \
     /* is T1 completly inside T2? */                    \
     /* check if V0 is inside tri(U0,U1,U2) */ \
     a=U1[i1]-U0[i1];                                                    \
@@ -113,10 +113,10 @@
     }                                                                                 \
 }
 
-int coplanar_tri_tri(vec3::Scalar N[3],vec3::Scalar V0[3],vec3::Scalar V1[3],vec3::Scalar V2[3],
-                                         vec3::Scalar U0[3],vec3::Scalar U1[3],vec3::Scalar U2[3])
+int coplanar_tri_tri(float N[3],float V0[3],float V1[3],float V2[3],
+                                         float U0[3],float U1[3],float U2[3])
 {
-     vec3::Scalar A[3];
+     float A[3];
      short i0,i1;
      /* first project onto an axis-aligned plane, that maximizes the area */
      /* of the triangles, compute indices: i0,i1. */
@@ -199,19 +199,19 @@ int coplanar_tri_tri(vec3::Scalar N[3],vec3::Scalar V0[3],vec3::Scalar V1[3],vec
 
 
 
-int NoDivTriTriIsect(vec3::Scalar V0[3],vec3::Scalar V1[3],vec3::Scalar V2[3],
-                                         vec3::Scalar U0[3],vec3::Scalar U1[3],vec3::Scalar U2[3])
+int NoDivTriTriIsect(float V0[3],float V1[3],float V2[3],
+                                         float U0[3],float U1[3],float U2[3])
 {
-    vec3::Scalar E1[3],E2[3];
-    vec3::Scalar N1[3],N2[3],d1,d2;
-    vec3::Scalar du0,du1,du2,dv0,dv1,dv2;
-    vec3::Scalar D[3];
-    vec3::Scalar isect1[2], isect2[2];
-    vec3::Scalar du0du1,du0du2,dv0dv1,dv0dv2;
+    float E1[3],E2[3];
+    float N1[3],N2[3],d1,d2;
+    float du0,du1,du2,dv0,dv1,dv2;
+    float D[3];
+    float isect1[2], isect2[2];
+    float du0du1,du0du2,dv0dv1,dv0dv2;
     short index;
-    vec3::Scalar vp0,vp1,vp2;
-    vec3::Scalar up0,up1,up2;
-    vec3::Scalar bb,cc,max;
+    float vp0,vp1,vp2;
+    float up0,up1,up2;
+    float bb,cc,max;
 
     /* compute plane equation of triangle(V0,V1,V2) */
     SUB(E1,V1,V0);
@@ -265,10 +265,10 @@ int NoDivTriTriIsect(vec3::Scalar V0[3],vec3::Scalar V1[3],vec3::Scalar V2[3],
     CROSS(D,N1,N2);
 
     /* compute and index to the largest component of D */
-    max=(vec3::Scalar)FABS(D[0]);
+    max=(float)FABS(D[0]);
     index=0;
-    bb=(vec3::Scalar)FABS(D[1]);
-    cc=(vec3::Scalar)FABS(D[2]);
+    bb=(float)FABS(D[1]);
+    cc=(float)FABS(D[2]);
     if(bb>max) max=bb,index=1;
     if(cc>max) max=cc,index=2;
 
@@ -282,14 +282,14 @@ int NoDivTriTriIsect(vec3::Scalar V0[3],vec3::Scalar V1[3],vec3::Scalar V2[3],
     up2=U2[index];
 
     /* compute interval for triangle 1 */
-    vec3::Scalar a,b,c,x0,x1;
+    float a,b,c,x0,x1;
     NEWCOMPUTE_INTERVALS(vp0,vp1,vp2,dv0,dv1,dv2,dv0dv1,dv0dv2,a,b,c,x0,x1);
 
     /* compute interval for triangle 2 */
-    vec3::Scalar d,e,f,y0,y1;
+    float d,e,f,y0,y1;
     NEWCOMPUTE_INTERVALS(up0,up1,up2,du0,du1,du2,du0du1,du0du2,d,e,f,y0,y1);
 
-    vec3::Scalar xx,yy,xxyy,tmp;
+    float xx,yy,xxyy,tmp;
     xx=x0*x1;
     yy=y0*y1;
     xxyy=xx*yy;
@@ -308,9 +308,9 @@ int NoDivTriTriIsect(vec3::Scalar V0[3],vec3::Scalar V1[3],vec3::Scalar V2[3],
     if(isect1[1]<isect2[0] || isect2[1]<isect1[0]) return 0;
     return 1;
 }
-bool intersect(const triangle& t1, const triangle& t2){
-    return NoDivTriTriIsect((vec3::Scalar*)(&t1.vertices[0]), (vec3::Scalar*)(&t1.vertices[1]), (vec3::Scalar*)(&t1.vertices[2]),
-    (vec3::Scalar*)(&t2.vertices[0]), (vec3::Scalar*)(&t2.vertices[1]), (vec3::Scalar*)(&t2.vertices[2])
+bool intersect(const triangle<float>& t1, const triangle<float>& t2){
+    return NoDivTriTriIsect((float*)(&t1.vertices[0]), (float*)(&t1.vertices[1]), (float*)(&t1.vertices[2]),
+    (float*)(&t2.vertices[0]), (float*)(&t2.vertices[1]), (float*)(&t2.vertices[2])
     
     );
 }

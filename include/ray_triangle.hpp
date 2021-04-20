@@ -3,7 +3,7 @@
 #include "structs.hpp"
 #include <avx.hpp>
 #if __has_include(<Eigen/Core>) && ! defined(DONT_USE_EIGEN)
-struct triangle8{
+/*struct triangle8{
     Eigen::Matrix<vec8f, 3, 1> vertices[3];
     triangle8(){}
     triangle8(const triangle& tr){
@@ -23,18 +23,20 @@ struct intersection8{
     Scalar t;
     Scalar u;
     Scalar v;
-};
-intersection8 intersect8(const ray &r, const triangle8 &t){
-    using lvec3 = Eigen::Matrix<vec8f, 3, 1>;
-    using scalar = lvec3::Scalar;
+};*/
+template<typename scalar>
+intersection<scalar> intersect(const ray<scalar> &r, const triangle<scalar> &t)
+    requires (!is_primitive_scalar<scalar>)
+{
+    using lvec3 = vec3_tm<scalar>;
 
-    intersection8 ret;
+    intersection<scalar> ret;
     lvec3 edge1, edge2, edge3, tvec, pvec, qvec;
     lvec3 raydir;
     lvec3 rayo;
     for(int i = 0;i < 3;i++){
-        raydir(i) = vec8f(r.d(i));
-        rayo(i) = vec8f(r.o(i));
+        raydir(i) = scalar(r.d(i));
+        rayo(i) = scalar(r.o(i));
     }
     scalar det(0.0f), inv_det(0.0f);
     edge1 = t.vertices[1] - t.vertices[0];
@@ -45,13 +47,12 @@ intersection8 intersect8(const ray &r, const triangle8 &t){
     ret.u = tvec.dot(pvec);
     qvec = tvec.cross(edge1);
     ret.v = raydir.dot(qvec);
-    vec8i outputmask(~0);
-    vec8i  first_branch = det >  EPSILON;
-    vec8i second_branch = det < -EPSILON;
-
-    vec8i schranzfirst  = (ret.u < 0.0f) | (ret.u > det) | (ret.v < 0.0f) | (ret.u + ret.v > det);
-    vec8i schranzsecond = (ret.u > 0.0f) | (ret.u < det) | (ret.v > 0.0f) | (ret.u + ret.v < det);
-
+    
+    auto  first_branch = det >  EPSILON;
+    auto second_branch = det < -EPSILON;
+    auto schranzfirst  = (ret.u < 0.0f) | (ret.u > det) | (ret.v < 0.0f) | (ret.u + ret.v > det);
+    auto schranzsecond = (ret.u > 0.0f) | (ret.u < det) | (ret.v > 0.0f) | (ret.u + ret.v < det);
+    decltype(first_branch) outputmask(~0);
     outputmask &= ~((schranzfirst & first_branch) | (schranzsecond & second_branch));
     outputmask &= (first_branch | second_branch);
     //if (det > EPSILON){
@@ -77,14 +78,16 @@ intersection8 intersect8(const ray &r, const triangle8 &t){
     (ret.u) *= inv_det;
     (ret.v) *= inv_det;
     ret.p = rayo + raydir * ret.t;
-    ret.vmask = outputmask;
+    ret.hitmask = outputmask;
     return ret;
 }
 #endif
-std::optional<intersection> intersect(const ray &r, const triangle &t){
-    using scalar = vec3::Scalar;
-    intersection ret;
-    vec3 edge1, edge2, edge3, tvec, pvec, qvec;
+template<typename scalar>
+std::optional<intersection<scalar>> intersect(const ray<scalar> &r, const triangle<scalar> &t)
+    requires is_primitive_scalar<scalar>
+{
+    intersection<scalar> ret;
+    vec3_tm<scalar> edge1, edge2, edge3, tvec, pvec, qvec;
     scalar det, inv_det;
     edge1 = t.vertices[1] - t.vertices[0];
     edge2 = t.vertices[2] - t.vertices[0];

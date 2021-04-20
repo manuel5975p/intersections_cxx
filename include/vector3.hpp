@@ -67,7 +67,7 @@ struct vecn_tm{
         return sqrt(squaredNorm());
     }
     vecn_tm normalized()const{
-        Scalar isqrt = Scalar(1) / norm();
+        Scalar isqrt = rsqrt(squaredNorm());
         return *this * isqrt;
     }
     void fill(const Scalar& x){
@@ -82,8 +82,8 @@ struct vecn_tm{
     vecn_tm& operator-=(const vecn_tm& o){*this = *this - o;return *this;}
     vecn_tm  operator*(const Scalar& o)const{return vecn_tm(x() * o,y() * o, z() * o);}
     vecn_tm  operator/(const Scalar& o)const{return vecn_tm(x() / o,y() / o, z() / o);}
-    template<typename stream_t, typename scalar, size_t n>
-    friend stream_t& operator<<(stream_t& str, const vecn_tm<scalar, n>& v){
+    template<typename stream_t>
+    friend stream_t& operator<<(stream_t& str, const vecn_tm<Scalar, n>& v){
         for(int i = 0;i < n;i++){
             str << v(i) << "\n";
         }

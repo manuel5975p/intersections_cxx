@@ -1,5 +1,6 @@
 #ifndef INTERSECTIONSXX_HPP
 #define INTERSECTIONSXX_HPP
+#include <avx.hpp>
 #include "structs.hpp"
 #include <optional>
 #include "ray_triangle.hpp"

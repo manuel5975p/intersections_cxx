@@ -5,7 +5,7 @@ struct Point3_dontuse{
     float           x;
     float           y;
     float           z;
-    Point3_dontuse(const vec3& _x) : x(_x.x()), y(_x.y()), z(_x.z()){}
+    Point3_dontuse(const vec3f& _x) : x(_x.x()), y(_x.y()), z(_x.z()){}
     Point3_dontuse() {}
     float& operator()(unsigned i){
         assert(i < 3);
@@ -40,8 +40,8 @@ typedef struct{
 #define OUTSIDE 1
 long t_c_intersection(Triangle3_dontuse t);
 
-bool intersect(const triangle& t, const aabb& b){
-    vec3 ex = b.end - b.start;
+bool intersect(const triangle<float>& t, const aabb<float>& b){
+    vec3f ex = b.end - b.start;
     Triangle3_dontuse copy;
     for(size_t i = 0;i < 3;i++){
         ex(i) = 1.0 / ex(i);
