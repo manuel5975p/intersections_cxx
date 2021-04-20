@@ -1,19 +1,26 @@
 #ifndef STRUCTS_HPP
 #define STRUCTS_HPP
-#if __has_include(<Eigen/Core>)
+#if __has_include(<Eigen/Core>) && ! defined(DONT_USE_EIGEN)
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 using vec3 = Eigen::Vector3f;
+namespace Eigen{
+template<>
+    struct NumTraits<vec8f> : NumTraits<float>{};
+}
 #else
 #include "vector3.hpp"
+using vec3 = vecn_tm<float, 3>;
 #endif
 #define EPSILON 0.00001
+
 struct intersection{
     vec3 p;
     vec3::Scalar t;
     vec3::Scalar u;
     vec3::Scalar v;
 };
+
 struct double_intersection{
     vec3 p;
     std::pair<vec3::Scalar, vec3::Scalar> t;
