@@ -48,7 +48,7 @@ struct vecn_tm{
     }
     template<typename otherscalar>
     vecn_tm cross(const vecn_tm<otherscalar, n>& o)const{
-        static_assert(n == 3, Cross only works for n = 3);
+        static_assert(n == 3, "Cross only works for n = 3");
         return vecn_tm(y() * o.z() - z() * o.y(), z() * o.x() - x() * o.z(), x() * o.y() - y() * o.z());
     }
     const Scalar& operator()(unsigned i)const{
