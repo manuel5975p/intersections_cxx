@@ -26,7 +26,7 @@ auto rsqrt<vec8f>(const vec8f& x){
     ret.data = _mm256_rsqrt_ps(x.data);
     return ret;
 }
-#if __has_include(<Eigen/Cored>) && ! defined(DONT_USE_EIGEN)
+#if __has_include(<Eigen/Core>) && ! defined(DONT_USE_EIGEN)
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 using vec3f = Eigen::Vector3f;
